@@ -75,7 +75,7 @@ def send_message(channel_id, message, configuration):
 def load_channles():
     access_token = os.environ.get("ACCESS_TOKEN")
     headers = {
-        "Authorization": f"Bearer crWzVZn1oYneExkQuAoVoCG1INpZCGuCuyrw",
+        "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json",
     }
 
@@ -95,7 +95,10 @@ def isnumber(s):
         return False
     
 def collect_channel(channel_id, configuration):
+    print('collect channel')
+    print('load channel')
     all_channel = load_channles()
+    print('load channel done')
     children = {}
     for channel in all_channel:
         if channel["parentId"] == channel_id and isnumber(channel["name"]):
