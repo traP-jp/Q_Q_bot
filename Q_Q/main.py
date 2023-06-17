@@ -43,11 +43,11 @@ def send_message(channel_id, message, configuration):
 def message_created(message):
     print(message)
     Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
-    if message.haskey("embedded"):
-        print(message["embedded"])
+    if "embedded" in message:
+
         for embedded in message["embedded"]:
             # 自分へのメンションを含むか判定
-            if embedded.has_key("type") and embedded["type"] == "user" and embedded["id"] == Q_Q_USER_ID:
+            if "type" in embedded and embedded["type"] == "user" and embedded["id"] == Q_Q_USER_ID:
                 join_channel(message["channelId"], CONFIGURATION)
                 send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
     
