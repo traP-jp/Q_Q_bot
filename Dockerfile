@@ -7,4 +7,7 @@ RUN pip install -r requirements.txt
 
 COPY Q_Q/main.py /srv/main.py
 
-CMD ["sleep", "5000"]
+
+
+CMD ["python", "main.py"]
+

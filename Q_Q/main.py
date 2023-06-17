@@ -41,7 +41,7 @@ def send_message(channel_id, message, configuration):
 
 @bot.message_created
 def message_created(message):
-    print(message)
+    log(message)
     Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
     if message.haskey("embedded"):
         for embedded in message["embedded"]:
@@ -50,7 +50,11 @@ def message_created(message):
                 join_channel(message["channelId"], CONFIGURATION)
                 send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
     
+def log(message):
+    with open('output.log', 'a') as f:
+        f.write(message + '\n')
 
 if __name__ == '__main__':
+    os.system('touch output.log')
     print('Start bot...')
     bot.run(8080)
