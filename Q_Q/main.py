@@ -10,4 +10,5 @@ def print_message_data(data: dict):
 
 
 if __name__ == '__main__':
+    print('Start bot...')
     bot.run(8080)
