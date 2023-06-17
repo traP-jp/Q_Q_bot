@@ -32,7 +32,6 @@ def send_message(channel_id, message, configuration):
             content=message,
             embed=False,
         ) 
-
     try:
         api_response = api_instance.post_message(channel_id, post_message_request=post_message_request)
     except traq.ApiException as e:
@@ -42,15 +41,15 @@ def send_message(channel_id, message, configuration):
 
 @bot.message_created
 def message_created(message):
+    print(message)
     Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
-    for embedded in message["embedded"]:
-        # 自分へのメンションを含むか判定
-        if embedded.has_key("type") and embedded["type"] == "user" and  embedded["id"] == Q_Q_USER_ID:
-            join_channel(message["channelId"], CONFIGURATION)
-            send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
+    if message.haskey("embedded"):
+        for embedded in message["embedded"]:
+            # 自分へのメンションを含むか判定
+            if embedded.has_key("type") and embedded["type"] == "user" and embedded["id"] == Q_Q_USER_ID:
+                join_channel(message["channelId"], CONFIGURATION)
+                send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
     
-
-
 
 if __name__ == '__main__':
     print('Start bot...')
