@@ -5,6 +5,7 @@ from traq_bot import TraqBot
 from traq.api import message_api
 from traq.api import bot_api
 from traq.model.post_bot_action_join_request import PostBotActionJoinRequest
+from traq.model.post_bot_action_leave_request import PostBotActionLeaveRequest
 import requests
 
 
@@ -30,13 +31,6 @@ def join_channel(channel_id, configuration):
     with traq.ApiClient(configuration) as api_client:
         api_instance = bot_api.BotApi(api_client)
         bot_id = Q_Q_USER_ID
-        post_bot_action_join_request = PostBotActionJoinRequest(
-            channel_id=channel_id,
-        ) 
-        try:
-            api_instance.let_bot_join_channel(bot_id)
-        except traq.ApiException as e:
-            print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
         try:
             api_instance.let_bot_join_channel(bot_id)
         except traq.ApiException as e:
@@ -46,7 +40,14 @@ def join_channel(channel_id, configuration):
 
 
 def leave_channel(channel_id, configuration):
-    pass
+    with traq.ApiClient(configuration) as api_client:
+        api_instance = bot_api.BotApi(api_client)
+        bot_id = Q_Q_USER_ID
+        try:
+            api_instance.let_bot_leave_channel(bot_id)
+        except traq.ApiException as e:
+            print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
+    send_message(channel_id, "Q_Q < leave~~", configuration)
 
 def send_message(channel_id, message, configuration):
     with traq.ApiClient(configuration) as api_client:
@@ -108,13 +109,16 @@ def message_created(message):
         for embedded in message["embedded"]:
             # 自分へのメンションを含むか判定
             if "type" in embedded and embedded["type"] == "user" and embedded["id"] == Q_Q_USER_ID:
-                join_channel(message["channelId"], CONFIGURATION)
-                children = collect_channel(message["channelId"], CONFIGURATION)
-                send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
-                log_channel(
-                    message["channelId"], children
-                )
-
+                # joinを含むか判定
+                if "join" in message["content"]:
+                    join_channel(message["channelId"], CONFIGURATION)
+                    children = collect_channel(message["channelId"], CONFIGURATION)
+                    send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
+                    log_channel(
+                        message["channelId"], children
+                    )
+                elif "leave" in message["content"]:
+                    leave_channel(message["channelId"], CONFIGURATION)
 # dump as json
 def log_channel(add_parent_id, add_children, to_file):
     # read to_file
