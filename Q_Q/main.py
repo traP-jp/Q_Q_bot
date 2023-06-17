@@ -35,7 +35,7 @@ def join_channel(channel_id, configuration):
         )
         bot_id = Q_Q_USER_ID
         try:
-            api_instance.let_bot_leave_channel(bot_id, post_bot_action_join_request=post_bot_action_join_request)
+            api_instance.let_bot_join_channel(bot_id, post_bot_action_join_request=post_bot_action_join_request)
         except traq.ApiException as e:
             print("Exception when calling BotApi->let_bot_leave_channel: %s\n" % e)
 
