@@ -1,9 +1,12 @@
 import os
+import json
 
 from traq_bot import TraqBot
 from traq.api import message_api
 from traq.api import bot_api
 from traq.model.post_bot_action_join_request import PostBotActionJoinRequest
+import requests
+
 
 import traq
 from traq.model.post_message_request import PostMessageRequest
@@ -58,6 +61,43 @@ def send_message(channel_id, message, configuration):
         print("Exception when calling MessageApi->post_message: %s\n" % e)
     return api_response
 
+
+
+# チャンネルリストを取得する
+def load_channles():
+    access_token = os.environ.get("ACCESS_TOKEN")
+    headers = {
+        "Authorization": f"Bearer crWzVZn1oYneExkQuAoVoCG1INpZCGuCuyrw",
+        "Content-Type": "application/json",
+    }
+
+    res = requests.get(
+        "https://q.trap.jp/api/v3/channels",
+        headers=headers,
+    )
+
+    return res.json()
+
+
+def isnumber(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+    
+def collect_channel(channel_id, configuration):
+    all_channel = load_channles()
+    children = {}
+    for channel in all_channel:
+        if channel["parentId"] == channel_id and isnumber(channel["name"]):
+            join_channel(channel["id"], configuration)
+            children[channel["name"]] = channel["id"]
+
+    return children
+
+
+
 @bot.message_created
 def message_created(message):
     print(message)
@@ -68,8 +108,25 @@ def message_created(message):
             # 自分へのメンションを含むか判定
             if "type" in embedded and embedded["type"] == "user" and embedded["id"] == Q_Q_USER_ID:
                 join_channel(message["channelId"], CONFIGURATION)
+                children = collect_channel(message["channelId"], CONFIGURATION)
                 send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
-    
+                log_channel(
+                    message["channelId"], children
+                )
+
+# dump as json
+def log_channel(add_parent_id, add_children, to_file):
+    # read to_file
+    with open(to_file, "r") as f:
+        data = json.load(f)
+
+    data[add_parent_id] = add_children
+
+    # write to_file
+    with open(to_file, "w") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+
 if __name__ == '__main__':
     os.system('touch output.log')
     print('Start bot...')
