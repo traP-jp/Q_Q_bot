@@ -19,6 +19,8 @@ CONFIGURATION.access_token = os.environ.get("ACCESS_TOKEN")
 bot = TraqBot(os.environ.get("VERIFY_TOKEN"))
 
 Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
+Q_Q_BOT_ID = "cc208ab8-4bfa-4de7-9e77-2d76a2721c5b"
+
 
 def join_channel(channel_id, configuration):
     send_message(channel_id, "Q_Q < Join~!", configuration)
@@ -28,13 +30,14 @@ def join_channel(channel_id, configuration):
         post_bot_action_join_request = PostBotActionJoinRequest(
             channel_id=channel_id,
         )
-        bot_id = Q_Q_USER_ID
+        bot_id = Q_Q_BOT_ID
         try:
             api_instance.let_bot_join_channel(bot_id, post_bot_action_join_request=post_bot_action_join_request)
+            send_message(channel_id, "Q_Q < done~!", configuration)
         except traq.ApiException as e:
-            print("Exception when calling BotApi->let_bot_leave_channel: %s\n" % e)
-    send_message(channel_id, "Q_Q < Join~!", configuration)
-
+            print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
+            send_message(channel_id, "Q_Q < failed~! :wara.ex-large:", configuration)
+    
 
 def leave_channel(channel_id, configuration):
     send_message(channel_id, "Q_Q < leave~~", configuration)
@@ -44,12 +47,13 @@ def leave_channel(channel_id, configuration):
         post_bot_action_leave_request = PostBotActionLeaveRequest(
             channel_id=channel_id,
         )
-        bot_id = Q_Q_USER_ID
+        bot_id = Q_Q_BOT_ID
         try:
             api_instance.let_bot_leave_channel(bot_id, post_bot_action_leave_request=post_bot_action_leave_request)
+            send_message(channel_id, "Q_Q < done~~", configuration)
         except traq.ApiException as e:
             print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
-    send_message(channel_id, "Q_Q < done~~", configuration)
+            send_message(channel_id, "Q_Q < failed~~ :wara.ex-large:", configuration)
 
 
 def send_message(channel_id, message, configuration):
