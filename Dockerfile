@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 COPY Q_Q/main.py /srv/main.py
 
-ENTRYPOINT ["/bin/sh", "-c", "while :; do sleep 10; done"]
+CMD ["sleep 5000"]
