@@ -30,11 +30,15 @@ def subchannels(all_channels, configuration):
 def join_channel(channel_id, configuration):
     with traq.ApiClient(configuration) as api_client:
         api_instance = bot_api.BotApi(api_client)
+        post_bot_action_join_request = PostBotActionJoinRequest(
+            channel_id=channel_id,
+        )
         bot_id = Q_Q_USER_ID
         try:
-            api_instance.let_bot_join_channel(bot_id)
+            api_instance.let_bot_leave_channel(bot_id, post_bot_action_join_request=post_bot_action_join_request)
         except traq.ApiException as e:
-            print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
+            print("Exception when calling BotApi->let_bot_leave_channel: %s\n" % e)
+
 
     send_message(channel_id, "Q_Q < Join~!", configuration)
 
@@ -42,9 +46,12 @@ def join_channel(channel_id, configuration):
 def leave_channel(channel_id, configuration):
     with traq.ApiClient(configuration) as api_client:
         api_instance = bot_api.BotApi(api_client)
+        post_bot_action_leave_request = PostBotActionLeaveRequest(
+            channel_id=channel_id,
+        )
         bot_id = Q_Q_USER_ID
         try:
-            api_instance.let_bot_leave_channel(bot_id)
+            api_instance.let_bot_leave_channel(bot_id, post_bot_action_leave_request=post_bot_action_leave_request)
         except traq.ApiException as e:
             print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
     send_message(channel_id, "Q_Q < leave~~", configuration)
