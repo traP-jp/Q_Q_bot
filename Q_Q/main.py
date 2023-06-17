@@ -42,9 +42,9 @@ def send_message(channel_id, message, configuration):
 @bot.message_created
 def message_created(message):
     print(message)
+    message = message['message']
     Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
     if "embedded" in message:
-
         for embedded in message["embedded"]:
             # 自分へのメンションを含むか判定
             if "type" in embedded and embedded["type"] == "user" and embedded["id"] == Q_Q_USER_ID:
