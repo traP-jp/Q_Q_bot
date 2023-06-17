@@ -12,20 +12,19 @@ CONFIGURATION = traq.Configuration(
 
 CONFIGURATION.access_token = os.environ.get("ACCESS_TOKEN")
 
-
-
-
 bot = TraqBot(os.environ.get("VERIFY_TOKEN"))
-
-
 
 @bot.message_created
 def message_created(message):
+    print('get message')
     Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
     for embedded in message["embedded"]:
         # 自分へのメンションを含むか判定
         if embedded.has_key("type") and embedded["type"] == "user" and  embedded["id"] == Q_Q_USER_ID:
+            print('this is mention')
+            print('join')
             join_channel(message["channelId"], CONFIGURATION)
+            print('send')
             send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
     
 
