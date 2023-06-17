@@ -1,14 +1,12 @@
 import os
 import json
+import requests
 
 from traq_bot import TraqBot
 from traq.api import message_api
 from traq.api import bot_api
 from traq.model.post_bot_action_join_request import PostBotActionJoinRequest
 from traq.model.post_bot_action_leave_request import PostBotActionLeaveRequest
-import requests
-
-
 import traq
 from traq.model.post_message_request import PostMessageRequest
 
@@ -20,14 +18,11 @@ CONFIGURATION.access_token = os.environ.get("ACCESS_TOKEN")
 
 bot = TraqBot(os.environ.get("VERIFY_TOKEN"))
 
-
 Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
 
-def subchannels(all_channels, configuration):
-    pass
-
-
 def join_channel(channel_id, configuration):
+    send_message(channel_id, "Q_Q < Join~!", configuration)
+    print('join to', channel_id)
     with traq.ApiClient(configuration) as api_client:
         api_instance = bot_api.BotApi(api_client)
         post_bot_action_join_request = PostBotActionJoinRequest(
@@ -38,12 +33,12 @@ def join_channel(channel_id, configuration):
             api_instance.let_bot_join_channel(bot_id, post_bot_action_join_request=post_bot_action_join_request)
         except traq.ApiException as e:
             print("Exception when calling BotApi->let_bot_leave_channel: %s\n" % e)
-
-
     send_message(channel_id, "Q_Q < Join~!", configuration)
 
 
 def leave_channel(channel_id, configuration):
+    send_message(channel_id, "Q_Q < leave~~", configuration)
+    print('leadve from', channel_id)
     with traq.ApiClient(configuration) as api_client:
         api_instance = bot_api.BotApi(api_client)
         post_bot_action_leave_request = PostBotActionLeaveRequest(
@@ -54,7 +49,8 @@ def leave_channel(channel_id, configuration):
             api_instance.let_bot_leave_channel(bot_id, post_bot_action_leave_request=post_bot_action_leave_request)
         except traq.ApiException as e:
             print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
-    send_message(channel_id, "Q_Q < leave~~", configuration)
+    send_message(channel_id, "Q_Q < done~~", configuration)
+
 
 def send_message(channel_id, message, configuration):
     with traq.ApiClient(configuration) as api_client:
@@ -104,7 +100,6 @@ def collect_channel(channel_id, configuration):
             children[channel["name"]] = channel["id"]
 
     return children
-
 
 
 @bot.message_created
