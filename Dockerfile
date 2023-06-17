@@ -1,12 +1,10 @@
 FROM python:3.10-alpine
 
-WORKDIR /srv
-
-COPY Q_Q/ /srv/
+COPY Q_Q/ .
 
 RUN pip install -r requirements.txt
 
-WORKDIR /srv/Q_Q
+WORKDIR /Q_Q
 
 CMD ["python", "main.py"]
 
