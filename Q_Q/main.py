@@ -124,7 +124,7 @@ def message_created(message):
                     log_channel(
                         message["channelId"], children
                     )
-                elif "leave" in message["content"]:
+                elif "leave" in message["plainText"]:
                     leave_channel(message["channelId"], CONFIGURATION)
 # dump as json
 def log_channel(add_parent_id, add_children, to_file):
