@@ -101,8 +101,7 @@ def collect_channel(channel_id, configuration):
     print('load channel done')
     children = {}
     print('loop channel')
-    for channel in all_channel:
-        print(channel)
+    for channel in all_channel['public']:
         if (channel["parentId"] == channel_id) and (isnumber(channel["name"])):
             print("join for id:", channel["id"], "name:", channel["name"])
             join_channel(channel["id"], configuration)
