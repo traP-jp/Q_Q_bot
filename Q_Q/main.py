@@ -2,6 +2,9 @@ import os
 
 from traq_bot import TraqBot
 from traq.api import message_api
+from traq.api import bot_api
+from traq.model.post_bot_action_join_request import PostBotActionJoinRequest
+
 import traq
 from traq.model.post_message_request import PostMessageRequest
 
@@ -13,12 +16,30 @@ CONFIGURATION.access_token = os.environ.get("ACCESS_TOKEN")
 
 bot = TraqBot(os.environ.get("VERIFY_TOKEN"))
 
+
+Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
+
 def subchannels(all_channels, configuration):
     pass
 
 
 def join_channel(channel_id, configuration):
-    pass
+    with traq.ApiClient(configuration) as api_client:
+        api_instance = bot_api.BotApi(api_client)
+        bot_id = Q_Q_USER_ID
+        post_bot_action_join_request = PostBotActionJoinRequest(
+            channel_id=channel_id,
+        ) 
+        try:
+            api_instance.let_bot_join_channel(bot_id)
+        except traq.ApiException as e:
+            print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
+        try:
+            api_instance.let_bot_join_channel(bot_id)
+        except traq.ApiException as e:
+            print("Exception when calling BotApi->let_bot_join_channel: %s\n" % e)
+
+    send_message(channel_id, "Q_Q < Join~!", configuration)
 
 
 def leave_channel(channel_id, configuration):
@@ -41,7 +62,6 @@ def send_message(channel_id, message, configuration):
 def message_created(message):
     print(message)
     message = message['message']
-    Q_Q_USER_ID = "c75f0d59-9722-416b-be31-b21375378690"
     if "embedded" in message:
         print()
         for embedded in message["embedded"]:
