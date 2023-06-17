@@ -117,7 +117,7 @@ def message_created(message):
             # 自分へのメンションを含むか判定
             if "type" in embedded and embedded["type"] == "user" and embedded["id"] == Q_Q_USER_ID:
                 # joinを含むか判定
-                if "join" in message["content"]:
+                if "join" in message["plainText"]:
                     join_channel(message["channelId"], CONFIGURATION)
                     children = collect_channel(message["channelId"], CONFIGURATION)
                     send_message(message["channelId"], "Q_Q < :oisu:", CONFIGURATION)
