@@ -91,6 +91,7 @@ def collect_channel(channel_id, configuration):
     children = {}
     for channel in all_channel:
         if channel["parentId"] == channel_id and isnumber(channel["name"]):
+            print("join for id:", channel["id"], "name:", channel["name"])
             join_channel(channel["id"], configuration)
             children[channel["name"]] = channel["id"]
 
