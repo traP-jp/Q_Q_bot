@@ -9,5 +9,5 @@ COPY Q_Q/main.py /srv/main.py
 
 
 
-CMD ["python", "main.py"]
+CMD ["python", "-u", "main.py"]
 
